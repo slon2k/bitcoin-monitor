@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import Api from './Api'
+import Rate from './Rate'
 
 const spinner = () => {
     return <div>Loading ...</div>
@@ -19,18 +20,22 @@ export default class App extends React.Component {
     api = new Api();
 
     componentWillMount() {
-        const bpi = this.api.getBpi();
-        this.setState({bpi});
+        const bpi = this.api.getFakeBpi();
+        this.setState({bpi: bpi.bpi});
     }
 
     render() {
         const {loading, bpi, error} = this.state;
+        console.log(bpi);
+        console.log(Object.values(bpi));
+        const rates = Object.values(bpi).map((item) => <Rate key={item.code} item={item}/>)
 
         return(
             <div>
                 <h2>App</h2>
                 { !error || errorMessage()}
                 { !loading || spinner()}
+                {rates}
 
             </div>
         )
