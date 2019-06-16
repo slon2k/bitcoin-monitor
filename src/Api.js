@@ -9,7 +9,6 @@ export default class Api {
         return await result.json();
     }
 
-
     getFakeBpi = () => {
         return {
             "bpi": {
