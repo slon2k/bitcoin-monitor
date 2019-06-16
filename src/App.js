@@ -1,26 +1,39 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Api from './Api'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const spinner = () => {
+    return <div>Loading ...</div>
 }
 
-export default App;
+const errorMessage = () => {
+    return <div>Unable to get data</div>
+}
+
+export default class App extends React.Component {
+    state = {
+        loading: false,
+        error: false
+    }
+
+    api = new Api();
+
+    componentWillMount() {
+        const bpi = this.api.getBpi();
+        this.setState({bpi});
+    }
+
+    render() {
+        const {loading, bpi, error} = this.state;
+
+        return(
+            <div>
+                <h2>App</h2>
+                { !error || errorMessage()}
+                { !loading || spinner()}
+
+            </div>
+        )
+    }
+}
+
