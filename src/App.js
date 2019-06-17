@@ -22,8 +22,7 @@ export default class App extends React.Component {
     api = new Api();
 
     onDataLoaded = ({bpi}) => {
-        const bpiPrev = this.state.bpi;
-        this.setState({bpi, bpiPrev, loading: false, error: false})
+        this.setState(prev => ({bpi, bpiPrev: prev.bpi, loading: false, error: false}))
     }
 
     onError = (err) => {
@@ -31,9 +30,14 @@ export default class App extends React.Component {
         this.setState({error: true, loading: false})
     }
 
+    createData() {
+        this.api.getBpi()
+            .then(({bpi}) => this.setState({bpi, bpiPrev: bpi, loading: false, error: false}))
+            .catch(this.onError)
+    }
 
     updateData() {
-        console.log("Updating");
+        console.log("Updating ...");
         this.api.getBpi()
             .then(this.onDataLoaded)
             .catch(this.onError)
@@ -41,7 +45,7 @@ export default class App extends React.Component {
 
     componentDidMount() {
         this.setState({loading: true});
-        this.updateData();
+        this.createData();
     }
 
     render() {
